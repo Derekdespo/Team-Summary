@@ -70,11 +70,36 @@ const createManager = () => {
 }
 
 const createEngineer = () => {
-
+    inquirer.prompt ([
+        {
+            type: "input",
+            name: "name",
+            message: "Enter the engineer's name"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "Enter the engineer's Work ID."
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "Enter the engineer's email."
+        },
+        {
+            type: "input",
+            name: "github",
+            message: "Enter the engineer's Github Username."
+        }
+    ]).then(response => {
+        const newEngineer = new Engineer(response.name, response.id, response.email, response.github);
+        teamMembers.push(newEngineer);
+        promptUser();
+    })
 }
 
 const createIntern = () => {
-    
+
 }
 
 const createTheTeam =() => {
