@@ -9,12 +9,14 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-
+// This empty array will get information passed into it from the prompts
 const teamMembers = [];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 function promptUser() {
     inquirer.prompt ([
+        // The initial question will ask the user which type of Employee they would like to add to their page
+        // Selecting a role will prompt further questions | selecting done will print the page
         {
             type: "list",
             name: "memberChoice",
@@ -33,13 +35,14 @@ function promptUser() {
         }
         else {
             createTheTeam();
+            console.log("Success! Team created!")
         }
     })
 }
+// calls the promptUser function
 promptUser();
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
+
+// function to create a new manager with information inputed by the user through prompts
 const createManager = () => {
     inquirer.prompt ([
         {
@@ -62,13 +65,14 @@ const createManager = () => {
             name: "officeNumber",
             message: "Enter the manager's office number."
         }
+        // then function to push the gathered information into the teamMembers array
     ]).then(response => {
         const newManager = new Manager(response.name, response.id, response.email, response.officeNumber);
         teamMembers.push(newManager);
         promptUser();
     })
 }
-
+// function to create a new Engineer with information inputed by the user in response to the prompts
 const createEngineer = () => {
     inquirer.prompt ([
         {
@@ -91,13 +95,14 @@ const createEngineer = () => {
             name: "github",
             message: "Enter the engineer's Github Username."
         }
+        // then function to push the new Engineer into the teamMembers array
     ]).then(response => {
         const newEngineer = new Engineer(response.name, response.id, response.email, response.github);
         teamMembers.push(newEngineer);
         promptUser();
     })
 }
-
+// function to create a new Intern with information inputed by the user in response to the prompts
 const createIntern = () => {
 inquirer.prompt ([
     {
@@ -120,6 +125,7 @@ inquirer.prompt ([
         name: "school",
         message: "Enter the interns's College/University."
     }
+    // then function to push the new Intern into the teamMembers array
 ]).then(response => {
     const newIntern = new Intern(response.name, response.id, response.email, response.school);
     teamMembers.push(newIntern);
@@ -127,6 +133,8 @@ inquirer.prompt ([
 })
 }
 
+
+// this function will create the full team in the html using writeFileSync and running the render function with the teamMembers array as its parameter
 const createTheTeam =() => {
     fs.writeFileSync("team.html", render(teamMembers), "utf-8") 
 }
